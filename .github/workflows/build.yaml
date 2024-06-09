@@ -8,25 +8,29 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3  # Updated to use Node.js 20
 
-      #used to cache dependencies with a timeout
+      - name: Adjust permissions
+        run: |
+          sudo chown -R $USER:$USER .
+          sudo chmod -R 755 .
+
       - name: Get Date
         id: get-date
         run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          echo "date=$(date -u +%Y%m%d)" >> $GITHUB_ENV
         shell: bash
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v2
+        uses: actions/cache@v3  # Updated to use Node.js 20
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3  # Updated to use Node.js 20
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
@@ -40,3 +44,11 @@ jobs:
         with:
           name: package
           path: ${{ steps.buildozer.outputs.filename }}
+
+      - name: Set safe directory
+        run: |
+          git config --global --add safe.directory /home/runner/work/test-app/test-app
+
+      - name: Fix git config permissions
+        run: |
+          sudo git config --global --unset-all http.https://github.com/.extraheader || true
