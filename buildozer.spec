@@ -27,22 +27,19 @@ orientation = portrait
 fullscreen = 1
 
 # (list) Application requirements
-requirements = python3,hostpython3,kivy,requests,beautifulsoup4,pillow
-#requirements = python3==3.7.6,hostpython3==3.7.6,kivy,requests,beautifulsoup4,pillow
-#osx.python_version=3.7.6
-#osx.kivy_version=1.9.1
+requirements = python3,kivy,requests,beautifulsoup4,pillow
 
 # (str) Application versioning (format: major.minor.patch)
 version = 0.1
 
 # (str) Presplash of the application
-presplash.filename = brain.png
+presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
-icon.filename = brain.png
+icon.filename = %(source.dir)s/data/icon.png
 
 # (list) Supported platforms
-android.archs = armeabi-v7a
+android.arch = armeabi-v7a
 
 [buildozer]
 # (str) Path to the build directory
