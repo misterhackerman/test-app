@@ -42,7 +42,7 @@ presplash.filename = brain.png
 icon.filename = brain.png
 
 # (list) Supported platforms
-android.arch = armeabi-v7a
+android.archs = armeabi-v7a
 
 [buildozer]
 # (str) Path to the build directory
