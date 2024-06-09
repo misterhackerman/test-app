@@ -31,8 +31,7 @@ requirements = python3,hostpython3,kivy,requests,beautifulsoup4,pillow
 #requirements = python3==3.7.6,hostpython3==3.7.6,kivy,requests,beautifulsoup4,pillow
 #osx.python_version=3.7.6
 #osx.kivy_version=1.9.1
-#icon.filename = %(source.dir)s/data/icon.png
-icon.filename = brain.png
+
 # (str) Application versioning (format: major.minor.patch)
 version = 0.1
 
