@@ -1,0 +1,12 @@
+beautifulsoup4
+bs4
+certifi
+charset-normalizer
+docutils
+idna
+Kivy
+Kivy-Garden
+Pygments
+requests
+soupsieve
+urllib3
