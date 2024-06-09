@@ -36,10 +36,10 @@ requirements = python3,hostpython3,kivy,requests,beautifulsoup4,pillow
 version = 0.1
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = brain.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/data/icon.png
+icon.filename = brain.png
 
 # (list) Supported platforms
 android.arch = armeabi-v7a
