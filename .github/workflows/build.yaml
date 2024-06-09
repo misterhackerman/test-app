@@ -5,52 +5,38 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4  # Ensure using latest version
+      - uses: actions/checkout@v2
 
-      - name: Adjust permissions
-        run: |
-          sudo chown -R $USER:$USER .
-          sudo chmod -R 755 .
-
+      # used to cache dependencies with a timeout
       - name: Get Date
         id: get-date
         run: |
-          echo "date=$(date -u +%Y%m%d)" >> $GITHUB_ENV
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v4  # Ensure using latest version
+        uses: actions/cache@v2
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
 
-      - name: Cache Buildozer directory
-        uses: actions/cache@v4  # Ensure using latest version
+      - uses: actions/cache@v2
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
           command: buildozer android debug
-          buildozer_version: stable
+          buildozer_version: master
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: package
           path: ${{ steps.buildozer.outputs.filename }}
-
-      - name: Set safe directory
-        run: |
-          git config --global --add safe.directory /home/runner/work/test-app/test-app
-
-      - name: Fix git config permissions
-        run: |
-          git config --global --unset-all http.https://github.com/.extraheader || true
-
