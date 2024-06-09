@@ -9,7 +9,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.popup import Popup
 from kivy.clock import Clock
-from kivy.uix.listview import ListView
+from kivy.uix.filechooser import FileChooserIconView
 
 from bs4 import BeautifulSoup
 import requests
@@ -178,9 +178,9 @@ class DownloaderApp(App):
         self.filetype_label = Label(text="Select File Types:")
         self.layout.add_widget(self.filetype_label)
         
-        self.pdf_checkbox = CheckBox()
+        self.pdf_checkbox = CheckBox(text='PDF')
         self.layout.add_widget(self.pdf_checkbox)
-        self.ppt_checkbox = CheckBox()
+        self.ppt_checkbox = CheckBox(text='PPT')
         self.layout.add_widget(self.ppt_checkbox)
         
         self.start_button = Button(text='Start Download', on_press=self.start_download)
@@ -192,11 +192,22 @@ class DownloaderApp(App):
         return self.layout
     
     def browse_folder(self, instance):
-        # This would use a file picker in a full app
-        self.folder_input.text = '/path/to/folder'
+        filechooser = FileChooserIconView()
+        popup = Popup(title="Select Folder", content=filechooser, size_hint=(0.9, 0.9))
+        
+        def on_selection(instance, selection):
+            if selection:
+                self.folder_input.text = selection[0]
+            popup.dismiss()
+        
+        filechooser.bind(on_selection=on_selection)
+        popup.open()
     
     def update_courses_menu(self, spinner, text):
-        self.course_spinner.values = [course[1] for course in find_courses(categories[text])]
+        if text in categories:
+            self.course_spinner.values = [course[1] for course in find_courses(categories[text])]
+        else:
+            self.course_spinner.values = []
     
     def start_download(self, instance):
         selected_category = self.category_spinner.text
@@ -231,12 +242,4 @@ class DownloaderApp(App):
         popup_layout = BoxLayout(orientation='vertical', padding=10)
         popup_layout.add_widget(Label(text=message))
         close_button = Button(text='Close', size_hint=(1, 0.25))
-        popup_layout.add_widget(close_button)
-        popup = Popup(title=title, content=popup_layout, size_hint=(0.75, 0.5))
-        close_button.bind(on_press=popup.dismiss)
-        popup.open()
-
-if __name__ == '__main__':
-    load_state()
-    DownloaderApp().run()
-    save_state()
+        popup
