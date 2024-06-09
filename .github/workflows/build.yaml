@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v3  # Updated to use Node.js 20
+      - uses: actions/checkout@v4  # Ensure using latest version
 
       - name: Adjust permissions
         run: |
@@ -22,12 +22,13 @@ jobs:
         shell: bash
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v3  # Updated to use Node.js 20
+        uses: actions/cache@v4  # Ensure using latest version
         with:
           path: .buildozer_global
           key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
-      - uses: actions/cache@v3  # Updated to use Node.js 20
+      - name: Cache Buildozer directory
+        uses: actions/cache@v4  # Ensure using latest version
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
@@ -51,4 +52,5 @@ jobs:
 
       - name: Fix git config permissions
         run: |
-          sudo git config --global --unset-all http.https://github.com/.extraheader || true
+          git config --global --unset-all http.https://github.com/.extraheader || true
+
