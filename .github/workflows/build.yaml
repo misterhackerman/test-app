@@ -1,1 +1,67 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
 
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Adjust permissions
+        run: |
+          sudo chown -R $USER:$USER .
+          sudo chmod -R 755 .
+
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "date=$(date -u +%Y%m%d)" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v4
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+
+      - name: Cache Buildozer directory
+        uses: actions/cache@v4
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            libssl-dev \
+            libffi-dev \
+            python3-dev \
+            python3-pip \
+            openjdk-8-jdk
+          pip3 install --upgrade cython
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
+
+      - name: Set safe directory
+        run: |
+          git config --global --add safe.directory /home/runner/work/test-app/test-app
+
+      - name: Fix git config permissions
+        run: |
+          sudo git config --system --unset-all http.https://github.com/.extraheader || true
