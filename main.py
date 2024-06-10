@@ -1,4 +1,5 @@
-from package import scraper.py
+from tools.downloaderApp import DownloaderApp
+from tools import scraper.py
 
 main():
     pass

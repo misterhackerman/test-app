@@ -5,8 +5,6 @@ import os
 import threading
 import json
 
-from package.downloaderApp import DownloaderApp
-
 # Constants
 DECOR = ' ::'
 HEADERS = {
