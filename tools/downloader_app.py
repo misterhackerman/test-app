@@ -10,6 +10,7 @@ from kivy.uix.popup import Popup
 from kivy.clock import Clock
 from kivy.uix.filechooser import FileChooserIconView
 import kivy
+import threading
 
 
 class DownloaderApp(App):

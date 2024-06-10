@@ -1,4 +1,4 @@
-#!/home/anonymous/test/test-app/venv/bin/python
+#!/home/anonymous/git/test-app/venv/bin/python
 
 import sys
 import argparse

@@ -2,10 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import os
-import threading
 import json
-
-from package.downloaderApp import DownloaderApp
 
 # Constants
 DECOR = ' ::'
