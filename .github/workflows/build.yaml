@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: [ main ]
@@ -9,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false  # Prevents .extraheader issues
 
       - name: Adjust permissions
         run: |
@@ -64,4 +67,9 @@ jobs:
 
       - name: Fix git config permissions
         run: |
+          git config --global --add safe.directory /github/workspace
           sudo git config --system --unset-all http.https://github.com/.extraheader || true
+
+      - name: Disable CI in git configuration
+        run: |
+          git config --global ci false
