@@ -1,4 +1,3 @@
-import kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -10,6 +9,7 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.popup import Popup
 from kivy.clock import Clock
 from kivy.uix.filechooser import FileChooserIconView
+import kivy
 
 
 class DownloaderApp(App):
